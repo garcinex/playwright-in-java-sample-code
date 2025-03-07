@@ -13,7 +13,6 @@ import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.*;
 
-@UsePlaywright
 public class ASimplePlaywrightTest {
 
     private Page page;
