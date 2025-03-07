@@ -1,13 +1,8 @@
 package com.serenitydojo.playwright;
 
-import com.microsoft.playwright.Browser;
-import com.microsoft.playwright.BrowserType;
-import com.microsoft.playwright.Page;
-import com.microsoft.playwright.Playwright;
+import com.microsoft.playwright.*;
 import com.microsoft.playwright.junit.UsePlaywright;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.util.Arrays;
 
@@ -15,25 +10,30 @@ import static org.assertj.core.api.Assertions.*;
 
 public class ASimplePlaywrightTest {
 
-    private Page page;
-    private Browser browser;
-    private Playwright playwright;
+    private static Page page;
+    private static Browser browser;
+    private static Playwright playwright;
+    private static BrowserContext browserContext;
 
-    @BeforeEach
-    void setUp() {
+    @BeforeAll
+    public static void setUpBrowser() {
         playwright = Playwright.create();
         browser = playwright
                 .chromium()
                 .launch(new BrowserType.LaunchOptions()
                         .setHeadless(false)
                         .setArgs(Arrays.asList("--start-maximized", "--no-sandbox", "--disable-gpu")));
-        page = browser.newPage();
+        browserContext = browser.newContext();
+    }
 
+    @BeforeEach
+    void setUp() {
+        page = browser.newPage();
         page.navigate("https://practicesoftwaretesting.com/");
     }
 
-    @AfterEach
-    void tearDown() {
+    @AfterAll
+    public static void tearDown() {
         browser.close();
         playwright.close();
     }
