@@ -72,7 +72,7 @@ public class PlaywrightLocatorsTest {
             page.locator("#first_name").fill("Sarah-Jane");
             page.locator(".btnSubmit").click();
             List<String> alertMessages = page.locator(".alert").allTextContents();
-            Assertions.assertTrue(!alertMessages.isEmpty());
+            org.assertj.core.api.Assertions.assertThat(alertMessages).isNotEmpty();
 
         }
 
