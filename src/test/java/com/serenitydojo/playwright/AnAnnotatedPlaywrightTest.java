@@ -18,13 +18,14 @@ public class AnAnnotatedPlaywrightTest {
         @Override
         public Options getOptions() {
             return new Options()
-//                    .setHeadless(false)
+                    .setHeadless(false)
                     .setLaunchOptions(
                             new BrowserType.LaunchOptions()
                                     .setArgs(Arrays.asList("--no-sandbox","--disable-gpu"))
                     );
         }
     }
+
     @Test
     void shouldShowThePageTitle(Page page) {
         page.navigate("https://practicesoftwaretesting.com");
