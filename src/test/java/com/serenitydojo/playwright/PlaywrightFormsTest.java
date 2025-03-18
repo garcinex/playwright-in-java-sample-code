@@ -1,8 +1,10 @@
 package com.serenitydojo.playwright;
 
+import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.junit.UsePlaywright;
 import com.microsoft.playwright.options.AriaRole;
+import com.microsoft.playwright.options.SelectOption;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -24,6 +26,19 @@ public class PlaywrightFormsTest {
         @BeforeEach
         void openContactPage(Page page) {
             page.navigate("https://practicesoftwaretesting.com/contact");
+        }
+
+        @Test
+        void fieldValues(Page page) {
+            Locator firstNameField = page.getByLabel("First name");
+            Locator subjectField = page.getByLabel("Subject");
+
+            firstNameField.fill("Sarah-Jane");
+            //            subjectField.selectOption("Warranty");
+            subjectField.selectOption(new SelectOption().setValue("warranty"));
+
+            assertThat(firstNameField).hasValue("Sarah-Jane");
+            assertThat(subjectField).hasValue("warranty");
         }
 
         @DisplayName("Complete the form")

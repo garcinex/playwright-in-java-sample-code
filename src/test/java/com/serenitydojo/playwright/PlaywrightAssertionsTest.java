@@ -29,9 +29,10 @@ public class PlaywrightAssertionsTest {
     static void setUpBrowser() {
         playwright = Playwright.create();
         browser = playwright.chromium().launch(
-                new BrowserType.LaunchOptions().setHeadless(true)
+                new BrowserType.LaunchOptions().setHeadless(false)
                         .setArgs(Arrays.asList("--no-sandbox", "--disable-extensions", "--disable-gpu"))
         );
+        playwright.selectors().setTestIdAttribute("data-test");
     }
 
     @BeforeEach
@@ -49,6 +50,18 @@ public class PlaywrightAssertionsTest {
     static void tearDown() {
         browser.close();
         playwright.close();
+    }
+
+    @Test
+    void shouldSortInAlphabeticalOrder() {
+        page.navigate("https://practicesoftwaretesting.com/");
+        page.getByLabel("sort").selectOption("Name (A - Z)");
+        page.waitForLoadState(LoadState.NETWORKIDLE);
+
+        List<String> strings = page.getByTestId("product-name").allTextContents();
+
+        org.assertj.core.api.Assertions.assertThat(strings).isSorted();
+        org.assertj.core.api.Assertions.assertThat(strings).isSortedAccordingTo(String.CASE_INSENSITIVE_ORDER);
     }
 
     @DisplayName("Making assertions about the contents of a field")
@@ -93,35 +106,6 @@ public class PlaywrightAssertionsTest {
 
             assertThat(subjectField).hasValue("warranty");
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         @DisplayName("By CSS class")
         @Test
